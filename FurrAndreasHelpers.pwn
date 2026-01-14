@@ -10,7 +10,7 @@
 
 #include <open.mp> // keep this here cuz its the only one that's being used
 
-/* // disabled includes cuz they arent used and they could increase compile time
+/* disabled includes cuz they arent used and they could increase compile time
 #include <core> 
 #include <float>
 #include <string>
