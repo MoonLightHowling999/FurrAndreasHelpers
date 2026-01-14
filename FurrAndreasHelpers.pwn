@@ -1,6 +1,8 @@
 // This is a filter script that is meant to help with FurrAndreas.
 // Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
-// Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
+// Date: 10/26/2025 - 1/14/2026 (Last Updated). Format: MM/DD/YYYY
+
+// Notes: this is not the final form of FurrAndreasHelpers, FurrAndreas is still in the alpha stage.
 
 /*
 -----------------------------------------------------------------------------------------------------------------
@@ -23,7 +25,7 @@ public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
     print("Created: 10/26/2025        ");
-    print("Updated: 12/29/2025        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
+    print("Updated: 1/14/2026        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
     print("HELLHOUND's FurrAndreasHelpers  :3");
 
 /*
