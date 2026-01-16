@@ -87,7 +87,9 @@ public OnFilterScriptInit()
 
     //Frosty's stuff
     AddCharModel(305, 20036, "AlexMercerLQ.dff", "AlexMercerLQ.txd"); // Frosty's stuff
-    AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd"); // Frosty's stuff
+    AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd");
+    AddCharModel(305, 20038, "Batman Insurgency.dff", "Batman Insurgency.txd");
+    AddCharModel(305, 20039, "Mambo.dff", "Mambo.txd");// Frosty's stuff
 
     // Hello :3 If you're one of the FurrAndreas testers and want to add your own skin, put it down below.
     // Make sure to follow the same structure I'm using, and also send me the skin files once you're done
