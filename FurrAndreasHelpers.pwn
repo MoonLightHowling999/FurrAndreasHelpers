@@ -93,6 +93,8 @@ public OnFilterScriptInit()
     // Make sure to follow the same structure I'm using, and also send me the skin files once you're done
     // either via private DMs or in #furrandreas-discussion
 
+    // Test
+
 
 
 
