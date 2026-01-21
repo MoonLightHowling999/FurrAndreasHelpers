@@ -1,8 +1,6 @@
 // This is a filter script that is meant to help with FurrAndreas.
 // Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
-// Date: 10/26/2025 - 1/14/2026 (Last Updated). Format: MM/DD/YYYY
-
-// Notes: this is not the final form of FurrAndreasHelpers, FurrAndreas is still in the alpha stage.
+// Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
 
 /*
 -----------------------------------------------------------------------------------------------------------------
@@ -10,8 +8,12 @@
 
 #include <open.mp> // keep this here cuz its the only one that's being used
 
-/* disabled includes cuz they arent used and they could increase compile time
-#include <core> 
+// Just added these commands for /mdl and /mdl is just a temp command for testing custom models, please delete it later if you dont need it.
+#include <IZCMD>  // Command processor
+#include <sscanf2> // For parsing command parameters
+
+/* // disabled includes cuz they arent used and they could increase compile time
+#include <core>
 #include <float>
 #include <string>
 #include <file>
@@ -25,16 +27,16 @@ public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
     print("Created: 10/26/2025        ");
-    print("Updated: 1/14/2026        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
+    print("Updated: 12/29/2025        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
     print("HELLHOUND's FurrAndreasHelpers  :3");
 
-/*
------------------------------------------------------------------------------------------------------------------
-*/
+    /*
+    -----------------------------------------------------------------------------------------------------------------
+    */
 
-// This Part of the code insures that the custom content thingies are actually being downloaded because artconfig.txt for some reason kept failing
-// Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that players have the required content installed before going to the gamemode, you get the point.
-   
+    // This Part of the code insures that the custom content thingies are actually being downloaded because artconfig.txt for some reason kept failing
+    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that players have the required content installed before going to the gamemode, you get the point.
+
     //Download Custom Content
     AddCharModel(305, 20001, "lvpdpc2.dff", "lvpdpc2.txd"); //Default
     AddCharModel(305, 20002, "lapdpd2.dff", "lapdpd2.txd"); //Default
@@ -87,27 +89,22 @@ public OnFilterScriptInit()
 
     //Frosty's stuff
     AddCharModel(305, 20036, "AlexMercerLQ.dff", "AlexMercerLQ.txd"); // Frosty's stuff
-    AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd");
-    AddCharModel(305, 20038, "Batman Insurgency.dff", "Batman Insurgency.txd");
-    AddCharModel(305, 20039, "Mambo.dff", "Mambo.txd");// Frosty's stuff
-
-    // Hello :3 If you're one of the FurrAndreas testers and want to add your own skin, put it down below.
-    // Make sure to follow the same structure I'm using, and also send me the skin files once you're done
-    // either via private DMs or in #furrandreas-discussion
-
+    AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd"); // Frosty's stuff
 
 
 
     //Objects
     AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); //Idk lol
+    AddSimpleModel(-1, 19379, -2004, "test4.dff", "test4.txd"); // Test object 4
 
-// and here it ends
 
-/*
------------------------------------------------------------------------------------------------------------------
-*/
+    // and here it ends
 
-// This one adds static vehicles like ambulances and police cars at hospitals and police departments
+    /*
+    -----------------------------------------------------------------------------------------------------------------
+    */
+
+    // This one adds static vehicles like ambulances and police cars at hospitals and police departments
 
     //FurrAndreas First ever static vehicle
     AddStaticVehicle(445, -2644.07, 1332.54, 7.06, 273.36, 1, 1);
@@ -183,11 +180,11 @@ public OnFilterScriptInit()
     AddStaticVehicle(604, 2450.9421, -77.5184, 26.2263, 91.9721, 0, 0); // Ghost TAXI in Polomino Creak
     SetVehicleNumberPlate(20, "I.H8.u"); // Its license plate
 
-/*
------------------------------------------------------------------------------------------------------------------
-*/
+    /*
+    -----------------------------------------------------------------------------------------------------------------
+    */
 
-// This part adds christmas trees, decorations and general mapping stuff like houses around the map.
+    // This part adds christmas trees, decorations and general mapping stuff like houses around the map.
     /*
         //Christistmas Tree
         CreateObject(19076, -1987.31, 720.75, 43.50, 0.0, 0.0, 0.0);
@@ -201,7 +198,7 @@ public OnFilterScriptInit()
         CreateObject(19076, -1909.45, 708.68, 43.50, 0.0, 0.0, 0.0);
     */
 
-    CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000); // add these things 
+    CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000); // add these things
     CreateObject(19076, -1976.33997, 721.34998, 42.64978,   0.00000, 0.00000, 0.00000); // oh yeah i just remeber these are crhistmas trees lol - noted on 12/28/2025
     CreateObject(19076, -1994.02405, 707.12061, 43.22939,   0.00000, 0.00000, 269.77176);
     CreateObject(19076, -1993.91003, 716.65002, 43.34063,   -0.66000, 0.90000, 237.35988);
@@ -260,7 +257,7 @@ public OnFilterScriptInit()
     CreateObject(19056, 2496.98999, -1687.95703, 13.07254,   -2.76000, 3.24000, 0.00000);
     CreateObject(19054, 2498.19263, -1687.96228, 13.11216,   0.18000, -1.02000, -47.27997);
     CreateObject(19057, 2497.56274, -1687.96802, 14.20602,   4.74000, -2.64000, 0.00000);
-    // CreateObject(14795, 4129.04834, -2111.07275, 8.88561,   0.00000, 0.00000, 0.00000); // Fucking found you you little bitch i had to write a whole debugger for you 
+    // CreateObject(14795, 4129.04834, -2111.07275, 8.88561,   0.00000, 0.00000, 0.00000); // Fucking found you you little bitch i had to write a whole debugger for you
     CreateObject(19076, 2095.38452, -1796.82507, 10.76728,   0.00000, 0.00000, -89.28001);
     CreateObject(19076, 2095.10205, -1817.05505, 10.76728,   0.00000, 0.00000, 92.94000);
     CreateObject(19076, 2073.59058, -1836.59705, 10.92488,   0.00000, 0.00000, -104.76007);
@@ -275,7 +272,7 @@ public OnFilterScriptInit()
     CreateObject(19076, 2382.63574, -1720.31238, 11.56093,   0.00000, 0.00000, 329.59213);
     CreateObject(19076, 2408.29590, -1721.45605, 11.56093,   0.00000, 0.00000, 31.04684);
     // CreateObject(1683, 2969.98511, -2173.01001, 1.70922,   -14.21998, 22.44000, 329.32623); // These might be causing some weird shit that i don't wanna deal with - disable for now
-    // CreateObject(1683, 2071.70752, -2454.57617, 18.45164,   0.00000, 0.00000, 232.15163); // . . . 
+    // CreateObject(1683, 2071.70752, -2454.57617, 18.45164,   0.00000, 0.00000, 232.15163); // ...
     // CreateObject(1683, 2101.09131, -2458.70117, 18.45164,   0.00000, 0.00000, 232.15163); // That's enough i guess
     CreateObject(19076, 2032.74207, -1704.74780, 11.07143,   0.00000, 0.00000, 87.65319);
     CreateObject(19076, 2052.45361, -1737.74329, 11.07143,   0.00000, 0.00000, 0.00000);
@@ -336,6 +333,30 @@ public OnFilterScriptInit()
     CreateObject(19076, -2377.26855, 1325.95227, 12.66862,   0.00000, 0.00000, 280.56595);
     CreateObject(19076, -2377.77954, 1344.92810, 9.66370,   0.00000, 0.00000, 280.56595);
 
+    // New island
+    CreateObject(11693, -12001.87305, 499.14133, -5.23584,   -1.68000, -0.36000, 0.00000);
+    CreateObject(11696, -12159.90771, 520.33289, -52.58772,   5.94000, 4.02000, 32.34002);
+    CreateObject(11695, -12066.38599, 673.89099, 21.94117,   0.00000, 0.00000, -8.10000);
+    CreateObject(19593, -12120.99072, 381.78571, -6.68688,   31.86001, 10.26001, 21.89999);
+    CreateObject(19879, -12073.34839, 302.98685, 14.59796,   -29.16002, 21.96000, 0.00000);
+    CreateObject(18751, -12073.13696, 313.14725, 1.62675,   0.00000, 0.00000, 0.00000);
+    CreateObject(9957, -11976.78271, 319.36832, -31.89294,   -0.36001, 21.24003, -43.43999);
+    CreateObject(5333, -11824.29858, 208.90216, 6.48571,   -33.36002, 10.37991, -20.46001);
+    CreateObject(18751, -12127.98340, 289.36411, -0.03922,   0.36000, -1.68000, 30.12000);
+    CreateObject(18751, -12148.44434, 344.68399, 0.09334,   0.36000, -1.68000, 21.84001);
+    CreateObject(18751, -12165.96875, 391.93826, 0.09334,   0.36000, -1.68000, -85.74001);
+    CreateObject(16599, -12165.87744, 359.53619, 4.85118,   -19.20000, -41.57996, 0.60000);
+    CreateObject(16599, -12173.65820, 356.93945, 6.34956,   -2.94000, 12.00000, 0.00000);
+    CreateObject(16599, -12179.77002, 355.80893, 4.04745,   -3.00000, -2.99998, 21.12001);
+    CreateObject(16599, -12187.87354, 349.36942, 2.40092,   -61.08000, 37.37999, 0.00000);
+    CreateObject(1395, -12042.42725, 358.68613, 5.02735,   4.56000, 7.13999, -30.35999);
+    CreateObject(1395, -12030.44702, 321.31293, 5.02735,   -20.28003, -11.03999, 44.81999);
+    CreateObject(5126, -12044.64087, 370.02814, 3.14798,   -10.01999, -2.76001, -49.49998);
+    CreateObject(5408, -12065.52734, 574.32996, 34.33768,   12.35999, -11.09999, 126.59999);
+    CreateObject(9829, -11861.19556, 536.88391, -61.80881,   0.00000, 0.00000, 202.20010);
+
+
+
     // Las venturas new buildings near the uhh..beach thingy
     CreateObject(3316, 2535.30957, 664.45404, 13.19760,   0.02000, 0.00000, 180.00000);
     CreateObject(3316, 2591.44873, 664.46179, 13.19360,   0.02000, 0.00000, 180.00000);
@@ -343,14 +364,43 @@ public OnFilterScriptInit()
     CreateObject(3307, 2615.74463, 670.02551, 11.24536,   0.00000, 0.00000, 90.12000);
     CreateObject(3316, 2641.42749, 664.55542, 13.19360,   0.02000, 0.00000, 180.00000);
 
+    // Here i'll add my own custom objects
+    CreateObject(-2002, -1551.96912, 741.29041, 8.10408,   0.00000, 0.00000, 0.00000);
+
+
     return 1; // End of OnFilterScriptInit
 }
 
-public OnFilterScriptExit()         
-{ // Print some info when the script is unloaded or close or whatever you call it
-    print("FurrAndreas helpers unloaded."); 
+public OnFilterScriptExit()
+{
+    // Print some info when the script is unloaded or close or whatever you call it
+    print("FurrAndreas helpers unloaded.");
     print("Created: 10/26/2025          ");
     print("Updated: 12/29/2025          ");
     print("HELLHOUND's FurrAndreasHelpers  :3  ");
     return 1;
+}
+
+CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location, just added it to test some blender stuff
+{
+    new objectid;
+
+    if (sscanf(params, "d", objectid))
+        return SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Usage: /mdl <object_id>");
+
+    new Float:x, Float:y, Float:z, Float:angle;
+    GetPlayerPos(playerid, x, y, z);
+    GetPlayerFacingAngle(playerid, angle);
+
+    // Offset 5 units in front of player so it doesn't spawn inside them (not sure why i didn't make it that way before lol)
+    x += 5 * floatsin(-angle, degrees);
+    y += 5 * floatcos(-angle, degrees);
+
+    CreateObject(objectid, x, y, z, 0, 0, 0); // create it at the calculated position
+
+    new msg[64];
+    format(msg, sizeof(msg),  "{74C0A3}Object %d spawned in front of you!", objectid); // little message to confirm
+    SendClientMessage(playerid, 0xFFFFFFFF, msg); // send the message
+
+    return 1; // alright we're done here
 }
