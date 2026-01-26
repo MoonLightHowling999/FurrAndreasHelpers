@@ -41,7 +41,7 @@ public OnFilterScriptInit()
     */
 
     // This Part of the code insures that the custom content thingies are actually being downloaded because artconfig.txt for some reason kept failing
-    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that players have the required content installed before going to the gamemode, you get the point.
+    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be using that so players are required installed content before going to the gamemode, you get the point.
 
     //Download Custom Content
     AddCharModel(305, 20001, "lvpdpc2.dff", "lvpdpc2.txd"); //Default
