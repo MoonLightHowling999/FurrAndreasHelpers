@@ -1,6 +1,6 @@
 // This is a filter script that is meant to help with FurrAndreas.
 // Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
-// Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
+// Date: 10/26/2025 - 1/26/2026 (Last Updated). Format: MM/DD/YYYY
 
 /*
 -----------------------------------------------------------------------------------------------------------------
