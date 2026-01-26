@@ -466,38 +466,6 @@ CMD:mdl(playerid, params[]) // Command to spawn an object at the player's locati
     return 1;
 }
 
-// Callback for when player finishes or cancels object editing
-// Note: open.mp callback disabled, objects can be edited but callback not processed
-// To re-enable: hook OnPlayerEditObject needs proper enum tagging support
-/*
-hook OnPlayerEditObject(playerid, playerobject, response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)
-{
-    if (response == 1)
-    {
-        MoveObject(playerobject, fX, fY, fZ, 0.0);
-        SendClientMessage(playerid, 0xFFFFFFFF, "{6FC773}Object saved!");
-    }
-    else if (response == 0)
-    {
-        DestroyObject(playerobject);
-        for (new i = 0; i < PlayerObjectCount[playerid]; i++)
-        {
-            if (PlayerObjectID[playerid][i] == playerobject)
-            {
-                for (new j = i; j < PlayerObjectCount[playerid] - 1; j++)
-                {
-                    PlayerObjectID[playerid][j] = PlayerObjectID[playerid][j + 1];
-                }
-                PlayerObjectCount[playerid]--;
-                break;
-            }
-        }
-    }
-    PlayerEditingObject[playerid] = -1;
-    return 1;
-}
-*/
-
 CMD:clearobjects(playerid, params[])
 {
     new count = PlayerObjectCount[playerid];
