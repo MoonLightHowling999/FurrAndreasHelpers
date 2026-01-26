@@ -33,7 +33,7 @@ public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
     print("Created: 10/26/2025        ");
-    print("Updated: 12/29/2025        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
+    print("Updated: 1/26/2026        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
     print("HELLHOUND's FurrAndreasHelpers  :3");
 
     /*
