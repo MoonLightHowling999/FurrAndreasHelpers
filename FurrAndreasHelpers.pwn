@@ -23,6 +23,12 @@
 
 #define FILTERSCRIPT // Defines this as a filter script or it won't work ofc
 
+// Object editing tracking
+#define MAX_PLAYER_OBJECTS 100
+new PlayerEditingObject[MAX_PLAYERS] = {-1, ...}; // Track which object player is editing (-1 = none)
+new PlayerObjectID[MAX_PLAYERS][MAX_PLAYER_OBJECTS]; // Track object IDs created by each player
+new PlayerObjectCount[MAX_PLAYERS] = {0, ...}; // Count of objects created by each player
+
 public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
@@ -91,11 +97,10 @@ public OnFilterScriptInit()
     AddCharModel(305, 20036, "AlexMercerLQ.dff", "AlexMercerLQ.txd"); // Frosty's stuff
     AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd"); // Frosty's stuff
 
-
-
     //Objects
-    AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); //Idk lol
-    AddSimpleModel(-1, 19379, -2004, "test4.dff", "test4.txd"); // Test object 4
+    AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); // Idk lol
+    AddSimpleModel(-1, 19379, -2001, "Hello.dff", "Hello.txd"); // Test object 4
+    AddSimpleModel(-1, 19379, -2002, "furrandreas.dff", "furrandreas.txd"); // FurrAndreas logo model
 
 
     // and here it ends
@@ -104,81 +109,109 @@ public OnFilterScriptInit()
     -----------------------------------------------------------------------------------------------------------------
     */
 
-    // This one adds static vehicles like ambulances and police cars at hospitals and police departments
+    // Vehicle Loading System - Arrays for automatic ID tracking and license plate assignment
+    // This eliminates the need to hardcode vehicle IDs and ensures plates assign correctly
 
-    //FurrAndreas First ever static vehicle
-    AddStaticVehicle(445, -2644.07, 1332.54, 7.06, 273.36, 1, 1);
-    SetVehicleNumberPlate(1, "FURRYSRV");
+    // Define vehicle data: {model, x, y, z, angle, color1, color2, plate}
+    new const VehicleData[][8] = {
+        // FurrAndreas First ever static vehicle
+        {445, -2644, 1332, 7, 273, 1, 1, 0}, // FURRYSRV
+        
+        // San Fierro Hospital - Santa Flora
+        {416, -2544, 586, 14, 90, 1, 3, 0}, // FA01SNTA
+        {416, -2544, 592, 14, 90, 3, 3, 0}, // FA02SNTA
+        
+        // Los Santos Hospital - Idlewood
+        {416, 2030, -1438, 17, 179, 1, 3, 0}, // FA01IDLW
+        {416, 2035, -1438, 17, 179, 3, 3, 0}, // FA02IDLW
+        
+        // Los Santos Hospital - Market
+        {416, 1180, -1308, 13, 269, 1, 3, 0}, // FA01MRKT
+        
+        // Las Venturas Hospital
+        {416, 1582, 1745, 10, 91, 1, 3, 0}, // FA01LV
+        {416, 1592, 1818, 10, 1, 3, 3, 0}, // FA02LV
+        
+        // Fort Carson Hospital & Police
+        {416, -331, 1062, 19, 271, 3, 3, 0}, // FA01FC
+        {599, -228, 992, 19, 298, 46, 1, 0}, // FCPD01
+        {599, -228, 998, 19, 298, 46, 1, 0}, // FCPD02
+        
+        // Bayside Hospital
+        {416, -2594, 2262, 8, 273, 1, 3, 0}, // FA01BAY
+        {416, -2595, 2267, 8, 291, 3, 1, 0}, // FA02BAY
+        
+        // El Quebrados Hospital & Police
+        {416, -1509, 2525, 55, 359, 1, 3, 0}, // FA01ELQ
+        {416, -1503, 2525, 55, 2, 1, 3, 0}, // FA02ELQ
+        {598, -1399, 2628, 55, 90, 41, 1, 0}, // EQPD01
+        {598, -1400, 2631, 55, 90, 41, 1, 0}, // EQPD02
+        {598, -1399, 2634, 55, 90, 41, 1, 0}, // EQPD03
+        {599, -1410, 2659, 55, 179, 41, 1, 0}, // EQPD04
+        {599, -1406, 2658, 55, 179, 41, 1, 0}, // EQPD05
+        
+        // Los Santos Airport
+        {519, 1603, -2623, 14, 32, 1, 1, 0}, // Airport Mechanic 1
+        {519, 1625, -2622, 14, 32, 1, 1, 0}, // Airport Mechanic 2
+        {519, 1649, -2621, 14, 32, 1, 1, 0}, // Airport Shamal
+        {519, 1967, -2237, 16, 3, 1, 1, 0}, // Airport Cargobob
+        {519, 2039, -2449, 16, -90, 1, 1, 0}, // Airport Maverick
+        
+        // Scattered Vehicles
+        {493, 2805, 299, 0, 234, 36, 13, 0}, // Jetmax at Las Venturas corner
+        {604, 2450, -77, 26, 91, 0, 0, 0} // Ghost TAXI in Polomino Creak
+    };
 
-    // San Fierro Hospital - Santa Flora
-    AddStaticVehicle(416, -2544.27, 586.97, 14.60, 90.34, 1, 3); // SF Hospital Ambulance 1
-    SetVehicleNumberPlate(1, "FA01SNTA"); // Its license plate
-    AddStaticVehicle(416, -2544.70, 592.90, 14.60, 90.34, 3, 3); // SF Hospital Ambulance 2
-    SetVehicleNumberPlate(2, "FA02SNTA"); // Its license plate
+    new const VehiclePlates[][] = {
+        "FURRYSRV",     // 0
+        "FA01SNTA",     // 1
+        "FA02SNTA",     // 2
+        "FA01IDLW",     // 3
+        "FA02IDLW",     // 4
+        "FA01MRKT",     // 5
+        "FA01LV",       // 6
+        "FA02LV",       // 7
+        "FA01FC",       // 8
+        "FCPD01",       // 9
+        "FCPD02",       // 10
+        "FA01BAY",      // 11
+        "FA02BAY",      // 12
+        "FA01ELQ",      // 13
+        "FA02ELQ",      // 14
+        "EQPD01",       // 15
+        "EQPD02",       // 16
+        "EQPD03",       // 17
+        "EQPD04",       // 18
+        "EQPD05",       // 19
+        "",             // 20 - No plate since this is a plane "shamal" to be exact, same for the rest.
+        "",             // 21 - No place 
+        "",             // 22 - No plate
+        "",             // 23 - No plate
+        "",             // 24 - No plate
+        "",             // 25 - No plate
+        "I.H8.u"        // 26
+    };
 
-    // Los Santos Hospital - Idlewood
-    AddStaticVehicle(416, 2030.62, -1438.94, 17.28, 179.74, 1, 3); // LS Idlewood Ambulance 1
-    SetVehicleNumberPlate(3, "FA01IDLW"); // Its license plate
-    AddStaticVehicle(416, 2035.62, -1438.94, 17.28, 179.74, 3, 3); // LS Idlewood Ambulance 2
-    SetVehicleNumberPlate(4, "FA02IDLW"); // Its license plate
-
-    // Los Santos Hospital - Market
-    AddStaticVehicle(416, 1180.87, -1308.59, 13.83, 269.99, 1, 3); // LS Market Ambulance
-    SetVehicleNumberPlate(5, "FA01MRKT"); // Its license plate
-
-    // Las Venturas Hospital
-    AddStaticVehicle(416, 1582.43, 1745.35, 10.97, 91.50, 1, 3); // LV Hospital Ambulance 1
-    SetVehicleNumberPlate(6, "FA01LV"); // Its license plate
-    AddStaticVehicle(416, 1592.38, 1818.97, 10.96, 1.53, 3, 3); // LV Hospital Ambulance 2
-    SetVehicleNumberPlate(7, "FA02LV"); // Its license plate
-
-
-    // Fort Carson Hospital
-    AddStaticVehicle(416, -331.89, 1062.82, 19.89, 271.30, 3, 3); // FC Hospital Ambulance
-    SetVehicleNumberPlate(8, "FA01FC"); // Its license plate
-
-    // Bayside Hospital
-    AddStaticVehicle(416, -2594.9502, 2262.9233, 8.3705, 273.4296, 1, 3); // Bayside Hospital Ambulance
-    SetVehicleNumberPlate(11, "FA01BAY"); // Its license plate
-    AddStaticVehicle(416, -2595.8208, 2267.6313, 8.4201, 291.5195, 3, 1); // Bayside Hospital Ambulance 2
-    SetVehicleNumberPlate(12, "FA02BAY"); // Its license plate
-    // El Quebrados Hospital
-    AddStaticVehicle(416, -1509.9623, 2525.5603, 55.8372, 359.8622, 1, 3); // El Quebrados Hospital Ambulance
-    SetVehicleNumberPlate(13, "FA01ELQ"); // Its license plate
-    AddStaticVehicle(416, -1503.7688, 2525.2842, 55.8370, 2.1282, 1, 3); //
-    SetVehicleNumberPlate(14, "FA02ELQ"); // Its license plate
-
-    //Police Cars:
-
-    // Fort Carson Police Department
-    AddStaticVehicle(599, -228.43, 992.25, 19.71, 298.33, 46, 1); // FCPD Ranger
-    SetVehicleNumberPlate(9, "FCPD01"); // Its license plate
-    AddStaticVehicle(599, -228.43, 998.25, 19.68, 298.33, 46, 1); // FCPD Ranger
-    SetVehicleNumberPlate(10, "FCPD02"); // Its license plate
-
-    // El Quebrados Police Department
-    AddStaticVehicle(598, -1399.5278, 2628.8118, 55.5279, 90.6071, 41, 1); // EQPD Police Car
-    SetVehicleNumberPlate(15, "EQPD01"); // Its license plate
-    AddStaticVehicle(598, -1400.4785, 2631.6777, 55.4993, 90.9763, 41, 1); // EQPD Police Car
-    SetVehicleNumberPlate(16, "EQPD02"); // Its license plate
-    AddStaticVehicle(598, -1399.9994, 2634.5232, 55.4667, 90.9029, 41, 1); // EQPD Police Car
-    SetVehicleNumberPlate(17, "EQPD03"); // Its license plate
-    AddStaticVehicle(599, -1410.8033, 2659.0588, 55.8790, 179.6558, 41, 1); // EQPD Ranger
-    SetVehicleNumberPlate(18, "EQPD04"); // Its license plate
-    AddStaticVehicle(599, -1406.3724, 2658.8867, 55.8768, 179.8928, 41, 1); // EQPD Ranger
-    SetVehicleNumberPlate(19, "EQPD05"); // Its license plate
-
-    // Los Santos Airpot
-    AddStaticVehicle(519, 1603.7855, -2623.5422, 14.5612, 32.0400, 1, 1); // Airport "Mechanic"
-    AddStaticVehicle(519, 1625.9315, -2622.9717, 14.5612, 32.0400, 1, 1); // Airport "Mechanic"
-    AddStaticVehicle(519, 1649.1564, -2621.7954, 14.5612, 32.0400, 1, 1); // shamal parked
-    AddStaticVehicle(519, 1967.7985, -2237.9780, 16.4679, 3.0000, 1, 1); // airport cargobob
-    AddStaticVehicle(519, 2039.8500, -2449.0532, 16.1243, -90.0000, 1, 1); // airport maverick
-
-    // Here and there vechicles
-    AddStaticVehicle(493, 2805.4114, 299.0978, -0.1892, 234.8013, 36, 13); // Jetmax at the corner to las venturas
-    AddStaticVehicle(604, 2450.9421, -77.5184, 26.2263, 91.9721, 0, 0); // Ghost TAXI in Polomino Creak
-    SetVehicleNumberPlate(20, "I.H8.u"); // Its license plate
+    // Load all vehicles and assign plates automatically
+    for (new i = 0; i < sizeof(VehicleData); i++)
+    {
+        new Float:x = float(VehicleData[i][1]);
+        new Float:y = float(VehicleData[i][2]);
+        new Float:z = float(VehicleData[i][3]);
+        new Float:angle = float(VehicleData[i][4]);
+        
+        new vehicleid = AddStaticVehicle(
+            VehicleData[i][0],  // model
+            x, y, z,            // position
+            angle,              // angle
+            VehicleData[i][5],  // color1
+            VehicleData[i][6]   // color2
+        );
+        
+        // Assign license plate if one exists
+        if (VehiclePlates[i][0] != '\0')
+            SetVehicleNumberPlate(vehicleid, VehiclePlates[i]);
+    }
 
     /*
     -----------------------------------------------------------------------------------------------------------------
@@ -381,7 +414,23 @@ public OnFilterScriptExit()
     return 1;
 }
 
-CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location, just added it to test some blender stuff
+CMD:select(playerid, params[])
+{
+    new objectid;
+    
+    if (sscanf(params, "d", objectid))
+    {
+        BeginObjectSelecting(playerid);
+        SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Usage: /select <object_id> or just /select to click objects");
+        return 1;
+    }
+    
+    BeginObjectEditing(playerid, objectid);
+    SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Editing object %d. Use arrow keys and mouse to edit.", objectid);
+    return 1;
+}
+
+CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location for editing
 {
     new objectid;
 
@@ -392,15 +441,85 @@ CMD:mdl(playerid, params[]) // Command to spawn an object at the player's locati
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, angle);
 
-    // Offset 5 units in front of player so it doesn't spawn inside them (not sure why i didn't make it that way before lol)
+    // Offset 5 units in front of player so it doesn't spawn inside them
     x += 5 * floatsin(-angle, degrees);
     y += 5 * floatcos(-angle, degrees);
 
-    CreateObject(objectid, x, y, z, 0, 0, 0); // create it at the calculated position
+    // Create the object
+    new obid = CreateObject(objectid, x, y, z, 0, 0, 0);
+    
+    // Track the object for this player
+    if (PlayerObjectCount[playerid] < MAX_PLAYER_OBJECTS)
+    {
+        PlayerObjectID[playerid][PlayerObjectCount[playerid]] = obid;
+        PlayerObjectCount[playerid]++;
+    }
+    
+    // Start object editing
+    BeginPlayerObjectEditing(playerid, obid);
+    PlayerEditingObject[playerid] = obid;
 
+    new msg[128];
+    format(msg, sizeof(msg), "{74C0A3}Object %d spawned! Use the editor to position it. (Objects: %d)", objectid, PlayerObjectCount[playerid]);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+
+    return 1;
+}
+
+// Callback for when player finishes or cancels object editing
+// Note: open.mp callback disabled, objects can be edited but callback not processed
+// To re-enable: hook OnPlayerEditObject needs proper enum tagging support
+/*
+hook OnPlayerEditObject(playerid, playerobject, response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)
+{
+    if (response == 1)
+    {
+        MoveObject(playerobject, fX, fY, fZ, 0.0);
+        SendClientMessage(playerid, 0xFFFFFFFF, "{6FC773}Object saved!");
+    }
+    else if (response == 0)
+    {
+        DestroyObject(playerobject);
+        for (new i = 0; i < PlayerObjectCount[playerid]; i++)
+        {
+            if (PlayerObjectID[playerid][i] == playerobject)
+            {
+                for (new j = i; j < PlayerObjectCount[playerid] - 1; j++)
+                {
+                    PlayerObjectID[playerid][j] = PlayerObjectID[playerid][j + 1];
+                }
+                PlayerObjectCount[playerid]--;
+                break;
+            }
+        }
+    }
+    PlayerEditingObject[playerid] = -1;
+    return 1;
+}
+*/
+
+CMD:clearobjects(playerid, params[])
+{
+    new count = PlayerObjectCount[playerid];
+    
+    for (new i = 0; i < count; i++)
+    {
+        DestroyObject(PlayerObjectID[playerid][i]);
+    }
+    
+    PlayerObjectCount[playerid] = 0;
+    
     new msg[64];
-    format(msg, sizeof(msg),  "{74C0A3}Object %d spawned in front of you!", objectid); // little message to confirm
-    SendClientMessage(playerid, 0xFFFFFFFF, msg); // send the message
+    format(msg, sizeof(msg), "{D43737}Cleared %d objects.", count);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+    
+    return 1;
+}
 
-    return 1; // alright we're done here
+CMD:objectcount(playerid, params[])
+{
+    new msg[64];
+    format(msg, sizeof(msg), "{74C0A3}You have %d objects created.", PlayerObjectCount[playerid]);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+    return 1;
 }
