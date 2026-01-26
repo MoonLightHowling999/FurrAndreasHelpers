@@ -409,7 +409,7 @@ public OnFilterScriptExit()
     // Print some info when the script is unloaded or close or whatever you call it
     print("FurrAndreas helpers unloaded.");
     print("Created: 10/26/2025          ");
-    print("Updated: 12/29/2025          ");
+    print("Updated: 1/26/2026          ");
     print("HELLHOUND's FurrAndreasHelpers  :3  ");
     return 1;
 }
