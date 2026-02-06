@@ -420,22 +420,6 @@ public OnFilterScriptExit()
     return 1;
 }
 
-CMD:select(playerid, params[])
-{
-    new objectid;
-
-    if (sscanf(params, "d", objectid))
-    {
-        BeginObjectSelecting(playerid);
-        SendClientMessage(playerid, 0x2EA298FF, "{74C0A3}Usage: /select <object_id> or just /select to click objects");
-        return 1;
-    }
-
-    BeginObjectEditing(playerid, objectid);
-    SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Editing object %d. Use arrow keys and mouse to edit.", objectid);
-    return 1;
-}
-
 CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location for editing
 {
     new objectid;
@@ -469,31 +453,5 @@ CMD:mdl(playerid, params[]) // Command to spawn an object at the player's locati
     format(msg, sizeof(msg), "{74C0A3}Object %d spawned! Use the editor to position it. (Objects: %d)", objectid, PlayerObjectCount[playerid]);
     SendClientMessage(playerid, 0xFFFFFFFF, msg);
 
-    return 1;
-}
-
-CMD:clearobjects(playerid, params[])
-{
-    new count = PlayerObjectCount[playerid];
-
-    for (new i = 0; i < count; i++)
-    {
-        DestroyObject(PlayerObjectID[playerid][i]);
-    }
-
-    PlayerObjectCount[playerid] = 0;
-
-    new msg[64];
-    format(msg, sizeof(msg), "{D43737}Cleared %d objects.", count);
-    SendClientMessage(playerid, 0xFFFFFFFF, msg);
-
-    return 1;
-}
-
-CMD:objectcount(playerid, params[])
-{
-    new msg[64];
-    format(msg, sizeof(msg), "{74C0A3}You have %d objects created.", PlayerObjectCount[playerid]);
-    SendClientMessage(playerid, 0xFFFFFFFF, msg);
     return 1;
 }
