@@ -1,6 +1,6 @@
 // This is a filter script that is meant to help with FurrAndreas.
 // Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
-// Date: 10/26/2025 - 1/26/2026 (Last Updated). Format: MM/DD/YYYY
+// Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
 
 /*
 -----------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
     print("Created: 10/26/2025        ");
-    print("Updated: 1/26/2026        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
+    print("Updated: 12/29/2025        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
     print("HELLHOUND's FurrAndreasHelpers  :3");
 
     /*
@@ -41,7 +41,7 @@ public OnFilterScriptInit()
     */
 
     // This Part of the code insures that the custom content thingies are actually being downloaded because artconfig.txt for some reason kept failing
-    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be using that so players are required installed content before going to the gamemode, you get the point.
+    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that players have the required content installed before going to the gamemode, you get the point.
 
     //Download Custom Content
     AddCharModel(305, 20001, "lvpdpc2.dff", "lvpdpc2.txd"); //Default
@@ -97,10 +97,17 @@ public OnFilterScriptInit()
     AddCharModel(305, 20036, "AlexMercerLQ.dff", "AlexMercerLQ.txd"); // Frosty's stuff
     AddCharModel(305, 20037, "Skeleton Version 1 - Old School.dff", "Skeleton Version 1 - Old School.txd"); // Frosty's stuff
 
+    // ASASxx's stuff
+    AddCharModel(305, 20038, "bmosec.dff", "bmosec.txd"); // ASASxx's stuff
+    AddCharModel(305, 20039, "bmydj.dff", "bmydj.txd"); // ASASxx's stuff
+
+    AddCharModel(305, 20040, "Mr.Versetti.dff", "Mr.Versetti.txd"); // Tommey Vercetti with suit
+    AddCharModel(305, 20041, "dnb3.dff", "dnb3.txd"); // New 
+    AddCharModel(305, 20042, "triboss.dff", "triboss.txd"); // New 
+
     //Objects
     AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); // Idk lol
-    AddSimpleModel(-1, 19379, -2001, "Hello.dff", "Hello.txd"); // Test object 4
-    AddSimpleModel(-1, 19379, -2002, "furrandreas.dff", "furrandreas.txd"); // FurrAndreas logo model
+    AddSimpleModel(-1, 19379, -2002, "fa_sign.dff", "fa_sign.txd"); // FurrAndreas logo model
 
 
     // and here it ends
@@ -113,34 +120,35 @@ public OnFilterScriptInit()
     // This eliminates the need to hardcode vehicle IDs and ensures plates assign correctly
 
     // Define vehicle data: {model, x, y, z, angle, color1, color2, plate}
-    new const VehicleData[][8] = {
+    new const VehicleData[][8] =
+    {
         // FurrAndreas First ever static vehicle
         {445, -2644, 1332, 7, 273, 1, 1, 0}, // FURRYSRV
-        
+
         // San Fierro Hospital - Santa Flora
         {416, -2544, 586, 14, 90, 1, 3, 0}, // FA01SNTA
         {416, -2544, 592, 14, 90, 3, 3, 0}, // FA02SNTA
-        
+
         // Los Santos Hospital - Idlewood
         {416, 2030, -1438, 17, 179, 1, 3, 0}, // FA01IDLW
         {416, 2035, -1438, 17, 179, 3, 3, 0}, // FA02IDLW
-        
+
         // Los Santos Hospital - Market
         {416, 1180, -1308, 13, 269, 1, 3, 0}, // FA01MRKT
-        
+
         // Las Venturas Hospital
         {416, 1582, 1745, 10, 91, 1, 3, 0}, // FA01LV
         {416, 1592, 1818, 10, 1, 3, 3, 0}, // FA02LV
-        
+
         // Fort Carson Hospital & Police
         {416, -331, 1062, 19, 271, 3, 3, 0}, // FA01FC
         {599, -228, 992, 19, 298, 46, 1, 0}, // FCPD01
         {599, -228, 998, 19, 298, 46, 1, 0}, // FCPD02
-        
+
         // Bayside Hospital
         {416, -2594, 2262, 8, 273, 1, 3, 0}, // FA01BAY
         {416, -2595, 2267, 8, 291, 3, 1, 0}, // FA02BAY
-        
+
         // El Quebrados Hospital & Police
         {416, -1509, 2525, 55, 359, 1, 3, 0}, // FA01ELQ
         {416, -1503, 2525, 55, 2, 1, 3, 0}, // FA02ELQ
@@ -149,20 +157,21 @@ public OnFilterScriptInit()
         {598, -1399, 2634, 55, 90, 41, 1, 0}, // EQPD03
         {599, -1410, 2659, 55, 179, 41, 1, 0}, // EQPD04
         {599, -1406, 2658, 55, 179, 41, 1, 0}, // EQPD05
-        
+
         // Los Santos Airport
         {519, 1603, -2623, 14, 32, 1, 1, 0}, // Airport Mechanic 1
         {519, 1625, -2622, 14, 32, 1, 1, 0}, // Airport Mechanic 2
         {519, 1649, -2621, 14, 32, 1, 1, 0}, // Airport Shamal
         {519, 1967, -2237, 16, 3, 1, 1, 0}, // Airport Cargobob
         {519, 2039, -2449, 16, -90, 1, 1, 0}, // Airport Maverick
-        
+
         // Scattered Vehicles
         {493, 2805, 299, 0, 234, 36, 13, 0}, // Jetmax at Las Venturas corner
         {604, 2450, -77, 26, 91, 0, 0, 0} // Ghost TAXI in Polomino Creak
     };
 
-    new const VehiclePlates[][] = {
+    new const VehiclePlates[][] =
+    {
         "FURRYSRV",     // 0
         "FA01SNTA",     // 1
         "FA02SNTA",     // 2
@@ -184,7 +193,7 @@ public OnFilterScriptInit()
         "EQPD04",       // 18
         "EQPD05",       // 19
         "",             // 20 - No plate since this is a plane "shamal" to be exact, same for the rest.
-        "",             // 21 - No place 
+        "",             // 21 - No place
         "",             // 22 - No plate
         "",             // 23 - No plate
         "",             // 24 - No plate
@@ -199,15 +208,15 @@ public OnFilterScriptInit()
         new Float:y = float(VehicleData[i][2]);
         new Float:z = float(VehicleData[i][3]);
         new Float:angle = float(VehicleData[i][4]);
-        
+
         new vehicleid = AddStaticVehicle(
-            VehicleData[i][0],  // model
-            x, y, z,            // position
-            angle,              // angle
-            VehicleData[i][5],  // color1
-            VehicleData[i][6]   // color2
-        );
-        
+                            VehicleData[i][0],  // model
+                            x, y, z,            // position
+                            angle,              // angle
+                            VehicleData[i][5],  // color1
+                            VehicleData[i][6]   // color2
+                        );
+
         // Assign license plate if one exists
         if (VehiclePlates[i][0] != '\0')
             SetVehicleNumberPlate(vehicleid, VehiclePlates[i]);
@@ -230,7 +239,7 @@ public OnFilterScriptInit()
         CreateObject(19076, -1908.66, 716.56, 43.50, 0.0, 0.0, 0.0);
         CreateObject(19076, -1909.45, 708.68, 43.50, 0.0, 0.0, 0.0);
     */
-
+    
     CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000); // add these things
     CreateObject(19076, -1976.33997, 721.34998, 42.64978,   0.00000, 0.00000, 0.00000); // oh yeah i just remeber these are crhistmas trees lol - noted on 12/28/2025
     CreateObject(19076, -1994.02405, 707.12061, 43.22939,   0.00000, 0.00000, 269.77176);
@@ -397,9 +406,6 @@ public OnFilterScriptInit()
     CreateObject(3307, 2615.74463, 670.02551, 11.24536,   0.00000, 0.00000, 90.12000);
     CreateObject(3316, 2641.42749, 664.55542, 13.19360,   0.02000, 0.00000, 180.00000);
 
-    // Here i'll add my own custom objects
-    CreateObject(-2002, -1551.96912, 741.29041, 8.10408,   0.00000, 0.00000, 0.00000);
-
 
     return 1; // End of OnFilterScriptInit
 }
@@ -409,7 +415,7 @@ public OnFilterScriptExit()
     // Print some info when the script is unloaded or close or whatever you call it
     print("FurrAndreas helpers unloaded.");
     print("Created: 10/26/2025          ");
-    print("Updated: 1/26/2026          ");
+    print("Updated: 12/29/2025          ");
     print("HELLHOUND's FurrAndreasHelpers  :3  ");
     return 1;
 }
@@ -417,14 +423,14 @@ public OnFilterScriptExit()
 CMD:select(playerid, params[])
 {
     new objectid;
-    
+
     if (sscanf(params, "d", objectid))
     {
         BeginObjectSelecting(playerid);
-        SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Usage: /select <object_id> or just /select to click objects");
+        SendClientMessage(playerid, 0x2EA298FF, "{74C0A3}Usage: /select <object_id> or just /select to click objects");
         return 1;
     }
-    
+
     BeginObjectEditing(playerid, objectid);
     SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Editing object %d. Use arrow keys and mouse to edit.", objectid);
     return 1;
@@ -447,14 +453,14 @@ CMD:mdl(playerid, params[]) // Command to spawn an object at the player's locati
 
     // Create the object
     new obid = CreateObject(objectid, x, y, z, 0, 0, 0);
-    
+
     // Track the object for this player
     if (PlayerObjectCount[playerid] < MAX_PLAYER_OBJECTS)
     {
         PlayerObjectID[playerid][PlayerObjectCount[playerid]] = obid;
         PlayerObjectCount[playerid]++;
     }
-    
+
     // Start object editing
     BeginPlayerObjectEditing(playerid, obid);
     PlayerEditingObject[playerid] = obid;
@@ -469,18 +475,18 @@ CMD:mdl(playerid, params[]) // Command to spawn an object at the player's locati
 CMD:clearobjects(playerid, params[])
 {
     new count = PlayerObjectCount[playerid];
-    
+
     for (new i = 0; i < count; i++)
     {
         DestroyObject(PlayerObjectID[playerid][i]);
     }
-    
+
     PlayerObjectCount[playerid] = 0;
-    
+
     new msg[64];
     format(msg, sizeof(msg), "{D43737}Cleared %d objects.", count);
     SendClientMessage(playerid, 0xFFFFFFFF, msg);
-    
+
     return 1;
 }
 
