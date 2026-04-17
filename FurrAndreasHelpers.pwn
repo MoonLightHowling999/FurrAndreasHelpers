@@ -2,15 +2,7 @@
 // Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
 // Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
 
-/*
------------------------------------------------------------------------------------------------------------------
-*/
-
-#include <open.mp> // keep this here cuz its the only one that's being used
-
-// Just added these commands for /mdl and /mdl is just a temp command for testing custom models, please delete it later if you dont need it.
-#include <IZCMD>  // Command processor
-#include <sscanf2> // For parsing command parameters
+// NOTE: this script contains an unhonly amount of comments, this is intentional and its meant to help my "barely a programmer" friends :3
 
 /* // disabled includes cuz they arent used and they could increase compile time
 #include <core>
@@ -20,14 +12,8 @@
 #include <time>
 */
 
-
+#include <callbacks> // For custom callback system, might be useful for some things
 #define FILTERSCRIPT // Defines this as a filter script or it won't work ofc
-
-// Object editing tracking
-#define MAX_PLAYER_OBJECTS 100
-new PlayerEditingObject[MAX_PLAYERS] = {-1, ...}; // Track which object player is editing (-1 = none)
-new PlayerObjectID[MAX_PLAYERS][MAX_PLAYER_OBJECTS]; // Track object IDs created by each player
-new PlayerObjectCount[MAX_PLAYERS] = {0, ...}; // Count of objects created by each player
 
 public OnFilterScriptInit()
 {
@@ -48,22 +34,22 @@ public OnFilterScriptInit()
     AddCharModel(305, 20002, "lapdpd2.dff", "lapdpd2.txd"); //Default
 
     //Counter-Terrorists
-    AddCharModel(305, 20003, "gign.dff", "gign.txd"); //CTs
-    AddCharModel(305, 20004, "gsg9.dff", "gsg9.txd"); //CTs
-    AddCharModel(305, 20005, "sas.dff", "sas.txd"); //CTs
-    AddCharModel(305, 20006, "urban.dff", "urban.txd"); //CTs
+    AddCharModel(285, 20003, "gign.dff", "gign.txd"); //CTs
+    AddCharModel(285, 20004, "gsg9.dff", "gsg9.txd"); //CTs
+    AddCharModel(285, 20005, "sas.dff", "sas.txd"); //CTs
+    AddCharModel(285, 20006, "urban.dff", "urban.txd"); //CTs
 
     //Terrorists
-    AddCharModel(305, 20007, "phenix.dff", "phenix.txd"); //Ts
-    AddCharModel(305, 20008, "arctic.dff", "arctic.txd"); //Ts
-    AddCharModel(305, 20009, "leet.dff", "leet.txd"); //Ts
-    AddCharModel(305, 20010, "guerilla.dff", "guerilla.txd"); //Ts
+    AddCharModel(247, 20007, "phenix.dff", "phenix.txd"); //Ts
+    AddCharModel(248, 20008, "arctic.dff", "arctic.txd"); //Ts
+    AddCharModel(248, 20009, "leet.dff", "leet.txd"); //Ts
+    AddCharModel(247, 20010, "guerilla.dff", "guerilla.txd"); //Ts
 
     //GTA ViceCity
     AddCharModel(305, 20011, "tommy.dff", "tommy.txd"); //GTAVC
-    AddCharModel(305, 20012, "vcpd.dff", "vcpd.txd"); //VCPD
-    AddCharModel(305, 20013, "vcpd1.dff", "vcpd1.txd"); //VCFBI
-    AddCharModel(305, 20014, "vcswat.dff", "vcswat.txd"); //VCDEA
+    AddCharModel(300, 20012, "vcpd.dff", "vcpd.txd"); //VCPD
+    AddCharModel(300, 20013, "vcpd1.dff", "vcpd1.txd"); //VCFBI
+    AddCharModel(285, 20014, "vcswat.dff", "vcswat.txd"); //VCDEA
 
 
     //LAW - SWAT
@@ -104,6 +90,7 @@ public OnFilterScriptInit()
     AddCharModel(305, 20040, "Mr.Versetti.dff", "Mr.Versetti.txd"); // Tommey Vercetti with suit
     AddCharModel(305, 20041, "dnb3.dff", "dnb3.txd"); // New 
     AddCharModel(305, 20042, "triboss.dff", "triboss.txd"); // New 
+    AddCharModel(305, 20043, "stuff.dff", "stuff.txd"); // New
 
     //Objects
     AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); // Idk lol
@@ -112,9 +99,9 @@ public OnFilterScriptInit()
 
     // and here it ends
 
-    /*
-    -----------------------------------------------------------------------------------------------------------------
-    */
+
+// -----------------------------------------------------------------------------------------------------------------
+
 
     // Vehicle Loading System - Arrays for automatic ID tracking and license plate assignment
     // This eliminates the need to hardcode vehicle IDs and ensures plates assign correctly
@@ -158,13 +145,6 @@ public OnFilterScriptInit()
         {599, -1410, 2659, 55, 179, 41, 1, 0}, // EQPD04
         {599, -1406, 2658, 55, 179, 41, 1, 0}, // EQPD05
 
-        // Los Santos Airport
-        {519, 1603, -2623, 14, 32, 1, 1, 0}, // Airport Mechanic 1
-        {519, 1625, -2622, 14, 32, 1, 1, 0}, // Airport Mechanic 2
-        {519, 1649, -2621, 14, 32, 1, 1, 0}, // Airport Shamal
-        {519, 1967, -2237, 16, 3, 1, 1, 0}, // Airport Cargobob
-        {519, 2039, -2449, 16, -90, 1, 1, 0}, // Airport Maverick
-
         // Scattered Vehicles
         {493, 2805, 299, 0, 234, 36, 13, 0}, // Jetmax at Las Venturas corner
         {604, 2450, -77, 26, 91, 0, 0, 0} // Ghost TAXI in Polomino Creak
@@ -192,12 +172,13 @@ public OnFilterScriptInit()
         "EQPD03",       // 17
         "EQPD04",       // 18
         "EQPD05",       // 19
-        "",             // 20 - No plate since this is a plane "shamal" to be exact, same for the rest.
+    /*    "",             // 20 - No plate since this is a plane "shamal" to be exact, same for the rest.
         "",             // 21 - No place
         "",             // 22 - No plate
         "",             // 23 - No plate
         "",             // 24 - No plate
         "",             // 25 - No plate
+    */
         "I.H8.u"        // 26
     };
 
@@ -240,6 +221,17 @@ public OnFilterScriptInit()
         CreateObject(19076, -1909.45, 708.68, 43.50, 0.0, 0.0, 0.0);
     */
     
+    // Smoke effetcs around the bayside area
+    /*CreateObject( 1267, -2599.11, 1368.06, 18.06, 0.0, 0.0, 193.78); */
+
+    CreateObject(19076, -2599.11, 1368.06, 5.04, 0.0, 0.0, 193.78); //Christal tree
+    CreateObject(18728, -2593.2827, 1363.4878, 7.0935, 0.0, 0.0, 193.78); //Christmas smoke
+    CreateObject(18728, -2595.6143, 1375.5519, 7.1393, 0.0, 0.0, 193.78); //Christmas smoke
+    CreateObject(18728, -2607.0442, 1368.6411, 7.1639, 0.0, 0.0, 193.78); //Christmas smoke
+    CreateObject(18728, -2599.1101, 1360.6364, 7.0741, 0.0, 0.0, 193.78); //Christmas smoke
+    CreateObject(18728, -2599.1101, 1360.6364, 7.0741, 0.0, 0.0, 193.78); //Christmas smoke
+
+
     CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000); // add these things
     CreateObject(19076, -1976.33997, 721.34998, 42.64978,   0.00000, 0.00000, 0.00000); // oh yeah i just remeber these are crhistmas trees lol - noted on 12/28/2025
     CreateObject(19076, -1994.02405, 707.12061, 43.22939,   0.00000, 0.00000, 269.77176);
@@ -407,51 +399,15 @@ public OnFilterScriptInit()
     CreateObject(3316, 2641.42749, 664.55542, 13.19360,   0.02000, 0.00000, 180.00000);
 
 
-    return 1; // End of OnFilterScriptInit
+    return 1;
 }
 
 public OnFilterScriptExit()
 {
-    // Print some info when the script is unloaded or close or whatever you call it
+    // this here so we know when it unloads in log files
     print("FurrAndreas helpers unloaded.");
     print("Created: 10/26/2025          ");
     print("Updated: 12/29/2025          ");
     print("HELLHOUND's FurrAndreasHelpers  :3  ");
-    return 1;
-}
-
-CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location for editing
-{
-    new objectid;
-
-    if (sscanf(params, "d", objectid))
-        return SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Usage: /mdl <object_id>");
-
-    new Float:x, Float:y, Float:z, Float:angle;
-    GetPlayerPos(playerid, x, y, z);
-    GetPlayerFacingAngle(playerid, angle);
-
-    // Offset 5 units in front of player so it doesn't spawn inside them
-    x += 5 * floatsin(-angle, degrees);
-    y += 5 * floatcos(-angle, degrees);
-
-    // Create the object
-    new obid = CreateObject(objectid, x, y, z, 0, 0, 0);
-
-    // Track the object for this player
-    if (PlayerObjectCount[playerid] < MAX_PLAYER_OBJECTS)
-    {
-        PlayerObjectID[playerid][PlayerObjectCount[playerid]] = obid;
-        PlayerObjectCount[playerid]++;
-    }
-
-    // Start object editing
-    BeginPlayerObjectEditing(playerid, obid);
-    PlayerEditingObject[playerid] = obid;
-
-    new msg[128];
-    format(msg, sizeof(msg), "{74C0A3}Object %d spawned! Use the editor to position it. (Objects: %d)", objectid, PlayerObjectCount[playerid]);
-    SendClientMessage(playerid, 0xFFFFFFFF, msg);
-
-    return 1;
+    return 1; // End of OnFilterScriptExit
 }
