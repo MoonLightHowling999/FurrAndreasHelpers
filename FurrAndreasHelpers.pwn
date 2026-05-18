@@ -1,55 +1,50 @@
-// This is a filter script that is meant to help with FurrAndreas.
-// Author: HELLHOUND aka Maxwell Nextem, Foxxie Doxxie Doggie Boggie bla bla a lot of ther usernames i'm konown by
-// Date: 10/26/2025 - 12/29/2025 (Last Updated). Format: MM/DD/YYYY
+// FurrAndreas Helpers - Filter script for custom content, vehicles, and map objects.
+// Author: HELLHOUND (Maxwell Nexten / Foxxie Doxxie / and many other names lol)
+// Created: 10/26/2025 | Last Updated: 12/29/2025 | Last Updated: 05/18/2026
 
-// NOTE: this script contains an unhonly amount of comments, this is intentional and its meant to help my "barely a programmer" friends :3
+#include <open.mp>
+#include <IZCMD>
+#include <sscanf2>
 
-/* // disabled includes cuz they arent used and they could increase compile time
-#include <core>
-#include <float>
-#include <string>
-#include <file>
-#include <time>
-*/
+#define FILTERSCRIPT
 
-#include <callbacks> // For custom callback system, might be useful for some things
-#define FILTERSCRIPT // Defines this as a filter script or it won't work ofc
+#define MAX_PLAYER_OBJECTS 100
+new PlayerEditingObject[MAX_PLAYERS] = {-1, ...};
+new PlayerObjectID[MAX_PLAYERS][MAX_PLAYER_OBJECTS];
+new PlayerObjectCount[MAX_PLAYERS] = {0, ...};
 
 public OnFilterScriptInit()
 {
     print("FurrAndreas helpers loaded.");
     print("Created: 10/26/2025        ");
     print("Updated: 12/29/2025        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
+    print("Updated: 05/18/2026        "); // PLEASE UPDATE THIS DATE WHENEVER YOU MAKE CHANGES, FUCK YOU.
     print("HELLHOUND's FurrAndreasHelpers  :3");
 
-    /*
-    -----------------------------------------------------------------------------------------------------------------
-    */
-
     // This Part of the code insures that the custom content thingies are actually being downloaded because artconfig.txt for some reason kept failing
-    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that players have the required content installed before going to the gamemode, you get the point.
+    // Why's it not a part of the gamemode? well filterscripts run before the gamemode does which means we will be use that so players will have the required content downloaded before going to the gamemode, you get the point.
 
     //Download Custom Content
     AddCharModel(305, 20001, "lvpdpc2.dff", "lvpdpc2.txd"); //Default
     AddCharModel(305, 20002, "lapdpd2.dff", "lapdpd2.txd"); //Default
 
     //Counter-Terrorists
-    AddCharModel(285, 20003, "gign.dff", "gign.txd"); //CTs
-    AddCharModel(285, 20004, "gsg9.dff", "gsg9.txd"); //CTs
-    AddCharModel(285, 20005, "sas.dff", "sas.txd"); //CTs
-    AddCharModel(285, 20006, "urban.dff", "urban.txd"); //CTs
+    AddCharModel(305, 20003, "gign.dff", "gign.txd"); //CTs
+    AddCharModel(305, 20004, "gsg9.dff", "gsg9.txd"); //CTs
+    AddCharModel(305, 20005, "sas.dff", "sas.txd"); //CTs
+    AddCharModel(305, 20006, "urban.dff", "urban.txd"); //CTs
 
     //Terrorists
-    AddCharModel(247, 20007, "phenix.dff", "phenix.txd"); //Ts
-    AddCharModel(248, 20008, "arctic.dff", "arctic.txd"); //Ts
-    AddCharModel(248, 20009, "leet.dff", "leet.txd"); //Ts
-    AddCharModel(247, 20010, "guerilla.dff", "guerilla.txd"); //Ts
+    AddCharModel(305, 20007, "phenix.dff", "phenix.txd"); //Ts
+    AddCharModel(305, 20008, "arctic.dff", "arctic.txd"); //Ts
+    AddCharModel(305, 20009, "leet.dff", "leet.txd"); //Ts
+    AddCharModel(305, 20010, "guerilla.dff", "guerilla.txd"); //Ts
 
     //GTA ViceCity
     AddCharModel(305, 20011, "tommy.dff", "tommy.txd"); //GTAVC
-    AddCharModel(300, 20012, "vcpd.dff", "vcpd.txd"); //VCPD
-    AddCharModel(300, 20013, "vcpd1.dff", "vcpd1.txd"); //VCFBI
-    AddCharModel(285, 20014, "vcswat.dff", "vcswat.txd"); //VCDEA
+    AddCharModel(305, 20012, "vcpd.dff", "vcpd.txd"); //VCPD
+    AddCharModel(305, 20013, "vcpd1.dff", "vcpd1.txd"); //VCFBI
+    AddCharModel(305, 20014, "vcswat.dff", "vcswat.txd"); //VCDEA
 
 
     //LAW - SWAT
@@ -59,9 +54,8 @@ public OnFilterScriptInit()
 
     //GSF beta
     AddCharModel(305, 20018, "fam1.dff", "fam1.txd"); //GSF beta
-    AddCharModel(305, 20019, "fam1.dff", "fam1.txd"); //GSF beta
-    AddCharModel(305, 20020, "fam2.dff", "fam2.txd"); //GSF beta
-    AddCharModel(305, 20021, "fam3.dff", "fam3.txd"); //GSF beta
+    AddCharModel(305, 20019, "fam2.dff", "fam2.txd"); //GSF beta (was duplicate of 20018, fixed)
+    AddCharModel(305, 20020, "fam3.dff", "fam3.txd"); //GSF beta
 
     //Furry gang
     AddCharModel(305, 20022, "doogie.dff", "doogie.txd"); // furry folks
@@ -88,23 +82,27 @@ public OnFilterScriptInit()
     AddCharModel(305, 20039, "bmydj.dff", "bmydj.txd"); // ASASxx's stuff
 
     AddCharModel(305, 20040, "Mr.Versetti.dff", "Mr.Versetti.txd"); // Tommey Vercetti with suit
-    AddCharModel(305, 20041, "dnb3.dff", "dnb3.txd"); // New 
-    AddCharModel(305, 20042, "triboss.dff", "triboss.txd"); // New 
-    AddCharModel(305, 20043, "stuff.dff", "stuff.txd"); // New
+    AddCharModel(305, 20041, "dnb3.dff", "dnb3.txd");
+    AddCharModel(305, 20042, "triboss.dff", "triboss.txd");
+    AddCharModel(305, 20043, "stuff.dff", "stuff.txd");
+    AddCharModel(305, 20044, "stuff2.dff", "stuff2.txd");
+
+    AddCharModel(305, 20045, "gtastuff_skin27.dff", "gtastuff_skin27.txd"); //GTA stuff pack
+    AddCharModel(305, 20046, "gtastuff_skin3.dff", "gtastuff_skin3.txd"); //GTA stuff pack
+    AddCharModel(305, 20047, "gtastuff_skin4.dff", "gtastuff_skin4.txd"); //GTA stuff pack
+    AddCharModel(305, 20048, "gtastuff_skin40.dff", "gtastuff_skin40.txd"); //GTA stuff pack
+    AddCharModel(305, 20049, "gtastuff_skin46.dff", "gtastuff_skin46.txd"); //GTA stuff pack
+    AddCharModel(305, 20050, "gtastuff_skin5.dff", "gtastuff_skin5.txd"); //GTA stuff pack
+    AddCharModel(305, 20051, "gtastuff_skin7.dff", "gtastuff_skin7.txd"); //GTA stuff pack
 
     //Objects
-    AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd"); // Idk lol
-    AddSimpleModel(-1, 19379, -2002, "fa_sign.dff", "fa_sign.txd"); // FurrAndreas logo model
+    AddSimpleModel(-1, 19379, -2000, "wallzzz.dff", "wallzzz.txd");
+    AddSimpleModel(-1, 19379, -2001, "fa_sign.dff", "fa_sign.txd"); // FurrAndreas logo model
 
 
-    // and here it ends
 
-
-// -----------------------------------------------------------------------------------------------------------------
-
-
-    // Vehicle Loading System - Arrays for automatic ID tracking and license plate assignment
-    // This eliminates the need to hardcode vehicle IDs and ensures plates assign correctly
+    // Vehicle Loading System Arrays for automatic ID tracking and license plate assignment
+    // This removes the need to hardcode vehicle IDs so we're good :3
 
     // Define vehicle data: {model, x, y, z, angle, color1, color2, plate}
     new const VehicleData[][8] =
@@ -203,11 +201,10 @@ public OnFilterScriptInit()
             SetVehicleNumberPlate(vehicleid, VehiclePlates[i]);
     }
 
-    /*
-    -----------------------------------------------------------------------------------------------------------------
-    */
 
-    // This part adds christmas trees, decorations and general mapping stuff like houses around the map.
+    // Christmas trees, seasonal decorations and general map objects, decorations and general mapping stuff like houses around the map.
+    
+    // NOTE: Christmass trees were added on 12/28/2025
     /*
         //Christistmas Tree
         CreateObject(19076, -1987.31, 720.75, 43.50, 0.0, 0.0, 0.0);
@@ -221,8 +218,7 @@ public OnFilterScriptInit()
         CreateObject(19076, -1909.45, 708.68, 43.50, 0.0, 0.0, 0.0);
     */
     
-    // Smoke effetcs around the bayside area
-    /*CreateObject( 1267, -2599.11, 1368.06, 18.06, 0.0, 0.0, 193.78); */
+    // Bayside christmas decorations
 
     CreateObject(19076, -2599.11, 1368.06, 5.04, 0.0, 0.0, 193.78); //Christal tree
     CreateObject(18728, -2593.2827, 1363.4878, 7.0935, 0.0, 0.0, 193.78); //Christmas smoke
@@ -230,10 +226,10 @@ public OnFilterScriptInit()
     CreateObject(18728, -2607.0442, 1368.6411, 7.1639, 0.0, 0.0, 193.78); //Christmas smoke
     CreateObject(18728, -2599.1101, 1360.6364, 7.0741, 0.0, 0.0, 193.78); //Christmas smoke
     CreateObject(18728, -2599.1101, 1360.6364, 7.0741, 0.0, 0.0, 193.78); //Christmas smoke
+    
 
-
-    CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000); // add these things
-    CreateObject(19076, -1976.33997, 721.34998, 42.64978,   0.00000, 0.00000, 0.00000); // oh yeah i just remeber these are crhistmas trees lol - noted on 12/28/2025
+    CreateObject(19076, -1987.31006, 720.75000, 42.99654,   0.00000, 0.00000, 0.00000);
+    CreateObject(19076, -1976.33997, 721.34998, 42.64978,   0.00000, 0.00000, 0.00000);
     CreateObject(19076, -1994.02405, 707.12061, 43.22939,   0.00000, 0.00000, 269.77176);
     CreateObject(19076, -1993.91003, 716.65002, 43.34063,   -0.66000, 0.90000, 237.35988);
     CreateObject(19076, -1951.71997, 719.04999, 43.86324,   0.00000, 0.00000, 0.00000);
@@ -404,10 +400,87 @@ public OnFilterScriptInit()
 
 public OnFilterScriptExit()
 {
-    // this here so we know when it unloads in log files
     print("FurrAndreas helpers unloaded.");
     print("Created: 10/26/2025          ");
-    print("Updated: 12/29/2025          ");
+    print("Updated: 05/18/2026          ");
     print("HELLHOUND's FurrAndreasHelpers  :3  ");
-    return 1; // End of OnFilterScriptExit
+    return 1;
+}
+
+CMD:select(playerid, params[])
+{
+    new objectid;
+
+    if (sscanf(params, "d", objectid))
+    {
+        BeginObjectSelecting(playerid);
+        SendClientMessage(playerid, 0x2EA298FF, "{74C0A3}Usage: /select <object_id> or just /select to click objects");
+        return 1;
+    }
+
+    BeginObjectEditing(playerid, objectid);
+    SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Editing object %d. Use arrow keys and mouse to edit.", objectid);
+    return 1;
+}
+
+CMD:mdl(playerid, params[]) // Command to spawn an object at the player's location for editing
+{
+    new objectid;
+
+    if (sscanf(params, "d", objectid))
+        return SendClientMessage(playerid, 0xFFFFFFFF, "{74C0A3}Usage: /mdl <object_id>");
+
+    new Float:x, Float:y, Float:z, Float:angle;
+    GetPlayerPos(playerid, x, y, z);
+    GetPlayerFacingAngle(playerid, angle);
+
+    // Offset 5 units in front of player so it doesn't spawn inside them
+    x += 5 * floatsin(-angle, degrees);
+    y += 5 * floatcos(-angle, degrees);
+
+    // Create the object
+    new obid = CreateObject(objectid, x, y, z, 0, 0, 0);
+
+    // Track the object for this player
+    if (PlayerObjectCount[playerid] < MAX_PLAYER_OBJECTS)
+    {
+        PlayerObjectID[playerid][PlayerObjectCount[playerid]] = obid;
+        PlayerObjectCount[playerid]++;
+    }
+
+    // Start object editing
+    BeginPlayerObjectEditing(playerid, obid);
+    PlayerEditingObject[playerid] = obid;
+
+    new msg[128];
+    format(msg, sizeof(msg), "{74C0A3}Object %d spawned! Use the editor to position it. (Objects: %d)", objectid, PlayerObjectCount[playerid]);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+
+    return 1;
+}
+
+CMD:clearobjects(playerid, params[])
+{
+    new count = PlayerObjectCount[playerid];
+
+    for (new i = 0; i < count; i++)
+    {
+        DestroyObject(PlayerObjectID[playerid][i]);
+    }
+
+    PlayerObjectCount[playerid] = 0;
+
+    new msg[64];
+    format(msg, sizeof(msg), "{D43737}Cleared %d objects.", count);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+
+    return 1;
+}
+
+CMD:objectcount(playerid, params[])
+{
+    new msg[64];
+    format(msg, sizeof(msg), "{74C0A3}You have %d objects created.", PlayerObjectCount[playerid]);
+    SendClientMessage(playerid, 0xFFFFFFFF, msg);
+    return 1;
 }
